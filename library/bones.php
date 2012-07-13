@@ -77,7 +77,9 @@ function bones_head_cleanup() {
 	// links for adjacent posts
 	remove_action( 'wp_head', 'adjacent_posts_rel_link_wp_head', 10, 0 ); 
 	// WP version
-	remove_action( 'wp_head', 'wp_generator' );                           
+	remove_action( 'wp_head', 'wp_generator' );
+	// Don't need this slow script in the head...
+	wp_deregister_script('jquery');                       
 
 } /* end bones head cleanup */
 
@@ -128,17 +130,18 @@ function bones_scripts_and_styles() {
     }
     
     //adding scripts file in the footer
+    /*
+    Since Wordpress automatically includes jQuery in the head, we've unregistered it in
+    the header cleanup function, and now we re-register it here.
+    */
+    wp_register_script('jquery', "http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js", false, '1.7.2', true);
+
     wp_register_script( 'bones-js', get_stylesheet_directory_uri() . '/library/js/scripts.js', array( 'jquery' ), '', true );
     
     // enqueue styles and scripts
     wp_enqueue_script( 'bones-modernizr' ); 
     wp_enqueue_style( 'bones-stylesheet' ); 
     wp_enqueue_style('bones-ie-only');
-    /*
-    I reccomend using a plugin to call jQuery
-    using the google cdn. That way it stays cached
-    and your site will load faster.
-    */
     wp_enqueue_script( 'jquery' ); 
     wp_enqueue_script( 'bones-js' ); 
     

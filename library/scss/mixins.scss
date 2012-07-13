@@ -50,16 +50,16 @@ Need help w/ choosing your colors? Try this site out:
 http://0to255.com/
 *********************/
 
-$alert-yellow:            #ebe16f;
-$alert-red:               #fbe3e4;
-$alert-green:             #e6efc2;
-$alert-blue:              #d5edf8;
+$alert-help:            #ebe16f;
+$alert-error:               #fbe3e4;
+$alert-success:             #e6efc2;
+$alert-info:              #d5edf8;
 
 $black:             #000;
 $white:             #fff;
 
-$bones-pink:        #f01d4f;
-$bones-blue:        #1990db;
+$primary-highlight:        #f01d4f;
+$secondary-highlight:        #1990db;
 	
 /*********************
 TYPOGRAPHY
@@ -112,23 +112,23 @@ span.amp {
 }
 
 .help { 
-	border-color: darken($alert-yellow, 5%); 
-	background: $alert-yellow; 
+	border-color: darken($alert-help, 5%); 
+	background: $alert-help; 
 }
 
 .info { 
-	border-color: darken($alert-blue, 5%); 
-	background: $alert-blue; 
+	border-color: darken($alert-info, 5%); 
+	background: $alert-info; 
 }
 
 .error { 
-	border-color: darken($alert-red, 5%); 
-	background: $alert-red; 
+	border-color: darken($alert-error, 5%); 
+	background: $alert-error; 
 }
 
 .success { 
-	border-color: darken($alert-green, 5%); 
-	background: $alert-green; 
+	border-color: darken($alert-success, 5%); 
+	background: $alert-success; 
 } 
 
 /*********************
@@ -185,7 +185,7 @@ don't use the shorthand to define *different* corners. */
 }
 
 /*********************
-TRANISTION
+TRANSITION
 *********************/
 
 /* @include transition(all,2s,ease-out); */
@@ -214,19 +214,38 @@ BOX SHADOWS
 }
 
 /*********************
+OPACITY
+*********************/
+	/* to do */
+	// @mixin opacity($level){
+
+	// }
+
+/*********************
 CSS3 GRADIENTS
 Be careful with these since they can 
-really slow down your CSS. Don't overdue it.
+really slow down your CSS. Don't overdo it.
 *********************/
 
 /* @include css-gradient(#dfdfdf,#f8f8f8); */
-@mixin css-gradient($from: #dfdfdf, $to: #f8f8f8) {
-	background-color: $to;
-	background-image: -webkit-gradient(linear, left top, left bottom, from($from), to($to));
-	background-image: -webkit-linear-gradient(top, $from, $to);
-	background-image: -moz-linear-gradient(top, $from, $to);
-	background-image: -o-linear-gradient(top, $from, $to);
-	background-image: linear-gradient(to bottom, $from, $to);
+@mixin css-gradient($from: #dfdfdf, $to: #f8f8f8, $secondary-image: "", $position:center center) {
+	@if secondary-image == "" {
+			background-color: $to;
+			background-image: -webkit-gradient(linear, left top, left bottom, from($from), to($to));
+			background-image: -webkit-linear-gradient(top, $from, $to);
+			background-image: -moz-linear-gradient(top, $from, $to);
+			background-image: -o-linear-gradient(top, $from, $to);
+			background-image: linear-gradient(to bottom, $from, $to);
+		} @else {
+			background-color: $to;
+			background-image: $secondary-image;
+			background-image: $secondary-image, -webkit-gradient(linear, left top, left bottom, from($from), to($to));
+			background-image: $secondary-image, -webkit-linear-gradient(top, $from, $to);
+			background-image: $secondary-image, -moz-linear-gradient(top, $from, $to);
+			background-image: $secondary-image, -o-linear-gradient(top, $from, $to);
+			background-image: $secondary-image, linear-gradient(to bottom, $from, $to);
+			background-position: $position;
+		}
 }
 
 /*********************
@@ -250,9 +269,9 @@ BUTTONS
 
 .button, .button:visited {
 	font-family: $sans-serif;
-	border: 1px solid darken($bones-pink, 13%);
-	border-top-color: darken($bones-pink, 7%);
-	border-left-color: darken($bones-pink, 7%);
+	border: 1px solid darken($primary-highlight, 13%);
+	border-top-color: darken($primary-highlight, 7%);
+	border-left-color: darken($primary-highlight, 7%);
 	padding: 4px 12px;
 	color: $white;
 	display: inline-block;
@@ -264,34 +283,34 @@ BUTTONS
 	margin-bottom: 20px;
 	line-height: 21px;
 	@include rounded(4px);
-	@include css-gradient($bones-pink, darken($bones-pink, 5%));
+	@include css-gradient($primary-highlight, darken($primary-highlight, 5%));
 
 
 	&:hover, &:focus {
 		color: $white;
-	  	border: 1px solid darken($bones-pink, 13%);
-	  	border-top-color: darken($bones-pink, 20%);
-	 	border-left-color: darken($bones-pink, 20%);
-		@include css-gradient(darken($bones-pink, 5%), darken($bones-pink, 10%));
+	  	border: 1px solid darken($primary-highlight, 13%);
+	  	border-top-color: darken($primary-highlight, 20%);
+	 	border-left-color: darken($primary-highlight, 20%);
+		@include css-gradient(darken($primary-highlight, 5%), darken($primary-highlight, 10%));
 	}
 	
 	&:active {
-		@include css-gradient(darken($bones-pink, 5%), $bones-pink);
+		@include css-gradient(darken($primary-highlight, 5%), $primary-highlight);
 	}	
 }
 
-.blue-button, .blue-button:visited {
-	border-color: darken($bones-blue, 10%);
-	text-shadow: 0 1px 1px darken($bones-blue, 10%);
-	@include css-gradient( $bones-blue, darken($bones-blue, 5%) );
-	-webkit-box-shadow: inset 0 0 3px lighten($bones-blue, 16%);
-       -moz-box-shadow: inset 0 0 3px lighten($bones-blue, 16%);
-   	        box-shadow: inset 0 0 3px lighten($bones-blue, 16%);
+.secondary-button, .secondary-button:visited {
+	border-color: darken($secondary-highlight, 10%);
+	text-shadow: 0 1px 1px darken($secondary-highlight, 10%);
+	@include css-gradient( $secondary-highlight, darken($secondary-highlight, 5%) );
+	-webkit-box-shadow: inset 0 0 3px lighten($secondary-highlight, 16%);
+       -moz-box-shadow: inset 0 0 3px lighten($secondary-highlight, 16%);
+   	        box-shadow: inset 0 0 3px lighten($secondary-highlight, 16%);
 	&:hover, &:focus {
-		border-color: darken($bones-blue, 15%);
-		@include css-gradient( darken($bones-blue, 4%), darken($bones-blue, 10%) );
+		border-color: darken($secondary-highlight, 15%);
+		@include css-gradient( darken($secondary-highlight, 4%), darken($secondary-highlight, 10%) );
 	}
 	&:active {
-		@include css-gradient( darken($bones-blue, 5%), $bones-blue );
+		@include css-gradient( darken($secondary-highlight, 5%), $secondary-highlight );
 	}
 }

@@ -35,11 +35,17 @@ CLEARFIXIN'
 }
 
 /*********************
+FLOATIN'
+*********************/
+.floatleft { float:left; }
+.floatright { float:right; }
+
+/*********************
 TOOLS
 *********************/
 
 /* http://www.zeldman.com/2012/03/01/replacing-the-9999px-hack-new-image-replacement/ */
-.image-replacement {
+.image-replacement, .ir {
 	text-indent: 100%;
 	white-space: nowrap;
 	overflow: hidden;
@@ -51,16 +57,16 @@ Need help w/ choosing your colors? Try this site out:
 http://0to255.com/
 *********************/
 
-@alert-yellow:            #ebe16f;
-@alert-red:               #fbe3e4;
-@alert-green:             #e6efc2;
-@alert-blue:              #d5edf8;
+@alert-help:            #ebe16f;
+@alert-error:               #fbe3e4;
+@alert-success:             #e6efc2;
+@alert-info:              #d5edf8;
 
 @black:             #000;
 @white:             #fff;
 
-@bones-pink:        #f01d4f;
-@bones-blue:        #1990db;
+@primary-highlight:        #f01d4f;
+@secondary-highlight:        #1990db;
 
 /*********************
 TYPOGRAPHY
@@ -113,23 +119,23 @@ span.amp {
 }
 
 .help { 
-	border-color: darken(@alert-yellow, 5%); 
-	background: @alert-yellow; 
+	border-color: darken(@alert-help, 5%); 
+	background: @alert-help; 
 }
 
 .info { 
-	border-color: darken(@alert-blue, 5%); 
-	background: @alert-blue; 
+	border-color: darken(@alert-info, 5%); 
+	background: @alert-info; 
 }
 
 .error { 
-	border-color: darken(@alert-red, 5%); 
-	background: @alert-red; 
+	border-color: darken(@alert-error, 5%);
+	background: @alert-error;
 }
 
 .success { 
-	border-color: darken(@alert-green, 5%); 
-	background: @alert-green; 
+	border-color: darken(@alert-success, 5%); 
+	background: @alert-success;
 } 
 
 /*********************
@@ -142,6 +148,9 @@ BORDER RADIUS
   -webkit-border-radius: @radius;
      -moz-border-radius: @radius;
           border-radius: @radius;
+          -moz-background-clip: padding;
+          -webkit-background-clip: padding-box;
+          		background-clip: padding-box;
 }
 
 /* .rounded-left(4px); */
@@ -185,7 +194,7 @@ BORDER RADIUS
 }
 
 /*********************
-TRANISTION
+TRANISITION
 *********************/
 
 /* .transition(all,2s); */
@@ -199,17 +208,31 @@ TRANISTION
 /*********************
 CSS3 GRADIENTS
 Be careful with these since they can 
-really slow down your CSS. Don't overdue it.
+really slow down your CSS. Don't overdo it.
+
+Also, make sure that if you are using
+a secondary background image, you are
+providing good fallbacks for browsers
+that don't support multiple BGs.
 *********************/
 
-/* .css-gradient(#dfdfdf,#f8f8f8); */
-.css-gradient(@from: #dfdfdf, @to: #f8f8f8) {
+/* .css-gradient(#dfdfdf,#f8f8f8,url(../images/foo.jpg)); */
+.css-gradient(@from: #dfdfdf, @to: #f8f8f8, @secondary-image: false, @position:center center) when not (@secondary-image = false){
 	background-color: @to;
-	background-image: -webkit-gradient(linear, left top, left bottom, from(@from), to(@to));
-	background-image: -webkit-linear-gradient(top, @from, @to);
-	background-image: -moz-linear-gradient(top, @from, @to);
-	background-image: -o-linear-gradient(top, @from, @to);
-	background-image: linear-gradient(to bottom, @from, @to);
+	background-image: @secondary-image;
+	background-image: @secondary-image, -webkit-gradient(linear, left top, left bottom, from(@from), to(@to));
+	background-image: @secondary-image, -webkit-linear-gradient(top, @from, @to);
+	background-image: @secondary-image, -moz-linear-gradient(top, @from, @to);
+	background-image: @secondary-image, -o-linear-gradient(top, @from, @to);
+	background-image: @secondary-image, linear-gradient(to bottom, @from, @to);
+	background-position: @position;
+}
+.css-gradient(@from: #dfdfdf, @to: #f8f8f8, @secondary-image: false, @position:center center) when (@secondary-image = false) {
+	background-color: @to;
+	background-image:  -webkit-gradient(linear, left top, left bottom, from(@from), to(@to));
+	background-image:  -webkit-linear-gradient(top, @from, @to);
+	background-image:  -moz-linear-gradient(top, @from, @to);
+	background-image:  -o-linear-gradient(top, @from, @to);
 }
 
 /*********************
@@ -238,13 +261,25 @@ BOX SHADOW
 }
 
 /*********************
+OPACITY
+*********************/
+.opacity(@level:0.8){
+	@ieOpacity: @level * 100;
+	-ms-filter: ~"progid:DXImageTransform.Microsoft.Alpha(Opacity=@{ieOpacity})";
+	filter: ~"alpha(opacity=@{ieOpacity})";
+  	-moz-opacity: @level;
+  	-khtml-opacity: @level;
+  	opacity: @level;
+}
+
+/*********************
 BUTTONS
 *********************/
 
 .button, .button:visited {
-	border: 1px solid darken(@bones-pink, 13%);
-	border-top-color: darken(@bones-pink, 7%);
-	border-left-color: darken(@bones-pink, 7%);
+	border: 1px solid darken(@primary-highlight, 13%);
+	border-top-color: darken(@primary-highlight, 7%);
+	border-left-color: darken(@primary-highlight, 7%);
 	padding: 4px 12px;
 	color: @white;
 	display: inline-block;
@@ -257,33 +292,33 @@ BUTTONS
 	line-height: 21px;
 	.transition();
 	.rounded(4px);
-	.css-gradient(@bones-pink,darken(@bones-pink, 5%));
+	.css-gradient(@primary-highlight,darken(@primary-highlight, 5%));
 
 	&:hover, &:focus {
 		color: @white;
-	  	border: 1px solid darken(@bones-pink, 13%);
-	  	border-top-color: darken(@bones-pink, 20%);
-	 	border-left-color: darken(@bones-pink, 20%);
-		.css-gradient(darken(@bones-pink, 5%),darken(@bones-pink, 10%));
+	  	border: 1px solid darken(@primary-highlight, 13%);
+	  	border-top-color: darken(@primary-highlight, 20%);
+	 	border-left-color: darken(@primary-highlight, 20%);
+		.css-gradient(darken(@primary-highlight, 5%),darken(@primary-highlight, 10%));
 	}
 	
 	&:active {
-		.css-gradient(darken(@bones-pink, 5%),@bones-pink);
+		.css-gradient(darken(@primary-highlight, 5%),@primary-highlight);
 	}	
 }
 
-.blue-button, .blue-button:visited {
-	border-color: darken(@bones-blue, 10%);
-	text-shadow: 0 1px 1px darken(@bones-blue, 10%);
-	.css-gradient( @bones-blue, darken(@bones-blue, 5%) );
-	-webkit-box-shadow: inset 0 0 3px lighten(@bones-blue, 16%);
-       -moz-box-shadow: inset 0 0 3px lighten(@bones-blue, 16%);
-   	        box-shadow: inset 0 0 3px lighten(@bones-blue, 16%);
+.secondary-button, .secondary-button:visited {
+	border-color: darken(@secondary-highlight, 10%);
+	text-shadow: 0 1px 1px darken(@secondary-highlight, 10%);
+	.css-gradient( @secondary-highlight, darken(@secondary-highlight, 5%) );
+	-webkit-box-shadow: inset 0 0 3px lighten(@secondary-highlight, 16%);
+       -moz-box-shadow: inset 0 0 3px lighten(@secondary-highlight, 16%);
+   	        box-shadow: inset 0 0 3px lighten(@secondary-highlight, 16%);
 	&:hover, &:focus {
-		border-color: darken(@bones-blue, 15%);
-		.css-gradient( darken(@bones-blue, 4%), darken(@bones-blue, 10%) );
+		border-color: darken(@secondary-highlight, 15%);
+		.css-gradient( darken(@secondary-highlight, 4%), darken(@secondary-highlight, 10%) );
 	}
 	&:active {
-		.css-gradient( darken(@bones-blue, 5%), @bones-blue );
+		.css-gradient( darken(@secondary-highlight, 5%), @secondary-highlight );
 	}
 }
